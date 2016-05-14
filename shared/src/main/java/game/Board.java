@@ -52,4 +52,8 @@ public class Board
     public int getNumberOfColumns() {
         return numberOfColumns;
     }
+
+    public boolean isBoardFull() {
+        return false;
+    }
 }

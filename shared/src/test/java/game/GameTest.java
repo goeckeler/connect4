@@ -120,4 +120,17 @@ public class GameTest {
 
         verify(gameObserver, never()).onGameFinished(Optional.of(firstPlayer));
     }
+
+    @Test
+    public void gameShouldFinishWhenThereAreNoEmptySlots() {
+        Board board = mock(Board.class);
+        when(board.isBoardFull()).thenReturn(true);
+        Game game = new Game(board, judge);
+        game.register(firstPlayer);
+        game.register(gameObserver);
+
+        game.insertChip(firstPlayer, 0);
+
+        verify(gameObserver).onGameFinished(Optional.empty());
+    }
 }

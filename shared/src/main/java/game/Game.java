@@ -38,7 +38,9 @@ public class Game {
         board.insertChip(columnNumber, currentPlayer);
         notifyObserversOfSlotOccupied(currentPlayer, columnNumber, board.lastUnoccupiedRowInColumn(columnNumber) + 1);
         if(judge.determineGameWinner().isPresent()) {
-            notifyObserversOfWinner(currentPlayer);
+            notifyObserversOfGameFinished(Optional.of(currentPlayer));
+        } else if(board.isBoardFull()) {
+            notifyObserversOfGameFinished(Optional.empty());
         } else {
             nextTurn();
         }
@@ -50,9 +52,9 @@ public class Game {
         }
     }
 
-    private void notifyObserversOfWinner(Player winner) {
+    private void notifyObserversOfGameFinished(Optional<Player> winner) {
         for(GameObserver observer : observers) {
-            observer.onGameFinished(Optional.of(winner));
+            observer.onGameFinished(winner);
         }
     }
 
