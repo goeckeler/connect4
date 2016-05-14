@@ -1,28 +1,35 @@
 package game;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 /**
  * Created by Dimitry on 14.05.2016.
  */
 public class JudgeTest {
+
+    private Board board = new Board(Game.NUMBER_OF_ROWS, Game.NUMBER_OF_COLUMNS);
+
     @Test
-    public void noWinnerIfNoSlotsAreOccupied() throws Exception {
-        Judge judge = new Judge(1);
-        assertThat (judge.determineGameWinner()).isEmpty();
-    }
-    @Test
-    public void winnerIfSufficientNumberOfSlotsAreOccupied() throws Exception {
-        Judge judge = new Judge(1);
-        Player player = mock(Player.class);
-        judge.onSlotOccupied(player, 0, 0);
-        assertThat (judge.determineGameWinner()).contains(player);
+    public void winnerIfLessThanSufficientNumberOfSlotsAreOccupied() throws Exception {
+        Judge judge = new Judge(2);
+        Player firstPlayer = mock(Player.class);
+        int column = 0;
+        board.insertChip(column, firstPlayer);
+        assertThat (judge.determineGameWinner(board, column)).isEmpty();
     }
 
+
+    @Test
+    public void winnerSlotsAreOccupiedByDifferentPlayers() throws Exception {
+        Judge judge = new Judge(2);
+        Player firstPlayer = mock(Player.class);
+        Player secondPlayer = mock(Player.class);
+        int column = 0;
+        board.insertChip(column, firstPlayer);
+        board.insertChip(column, secondPlayer);
+        assertThat (judge.determineGameWinner(board, column)).isEmpty();
+    }
 }

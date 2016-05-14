@@ -17,7 +17,6 @@ public class Game {
     public Game(Board board, Judge judge) {
         this.board = board;
         this.judge = judge;
-        register(judge);
     }
 
     public void start() {
@@ -38,8 +37,9 @@ public class Game {
             throw new IllegalArgumentException();
         board.insertChip(columnNumber, currentPlayer);
         notifyObserversOfSlotOccupied(currentPlayer, columnNumber, board.lastUnoccupiedRowInColumn(columnNumber) + 1);
-        if(judge.determineGameWinner().isPresent()) {
-            notifyObserversOfGameFinished(Optional.of(currentPlayer));
+        Optional<Player> winner = judge.determineGameWinner(board, columnNumber);
+        if(winner.isPresent()) {
+            notifyObserversOfGameFinished(winner);
         } else if(board.isBoardFull()) {
             notifyObserversOfGameFinished(Optional.empty());
         } else {

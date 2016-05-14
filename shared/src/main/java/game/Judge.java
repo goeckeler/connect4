@@ -5,26 +5,23 @@ import java.util.Optional;
 /**
  * Created by Dimitry on 14.05.2016.
  */
-public class Judge implements GameObserver{
+public class Judge {
     private final int numberOfSlotsToWin;
-    private Player winner;
 
     public Judge(int numberOfSlotsToWin) {
 
         this.numberOfSlotsToWin = numberOfSlotsToWin;
     }
 
-    public Optional<Player> determineGameWinner() {
-        return Optional.ofNullable(winner);
+    public Optional<Player> determineGameWinner(Board board, final int column) {
+        final int row = board.lastUnoccupiedRowInColumn(column) + 1;
+        Optional<Player> slotOwner = board.slotOwner(row, column);
+        return slotOwner.filter(
+                player -> hasWon(board, player, row, column)
+        );
     }
 
-    @Override
-    public void onSlotOccupied(Player player, int rowNumber, int columnNumber) {
-        winner = player;
-    }
-
-    @Override
-    public void onGameFinished(Optional<Player> winner) {
-
+    private boolean hasWon(Board board, Player player, int row, int column) {
+        return false;
     }
 }

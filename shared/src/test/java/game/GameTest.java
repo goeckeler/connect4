@@ -2,6 +2,7 @@ package game;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class GameTest {
 
     @Before
     public void setupGameWithTwoPlayers() {
-        when(judge.determineGameWinner()).thenReturn(Optional.empty());
+        when(judge.determineGameWinner(any(), anyInt())).thenReturn(Optional.empty());
         game.register(firstPlayer);
         game.register(secondPlayer);
         game.register(gameObserver);
@@ -90,15 +91,6 @@ public class GameTest {
 
 
     @Test
-    public void gameShouldTellJudgeTheOccupiedSlot() {
-        int columnNumber = 0;
-        game.insertChip(firstPlayer, columnNumber);
-
-        int rowNumber = Game.NUMBER_OF_ROWS - 1;
-        verify(judge).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
-    }
-
-    @Test
     public void gameShouldTellGameObserversAboutOccupiedSlotsAboveLastRow() {
         game.insertChip(firstPlayer, 0);
         game.insertChip(secondPlayer, 0);
@@ -108,7 +100,7 @@ public class GameTest {
 
     @Test
     public void gameShouldTellGameObserversWhenGameIsWon() {
-        when(judge.determineGameWinner()).thenReturn(Optional.of(firstPlayer));
+        when(judge.determineGameWinner(board, 0)).thenReturn(Optional.of(firstPlayer));
 
         game.insertChip(firstPlayer, 0);
 
@@ -117,7 +109,7 @@ public class GameTest {
 
     @Test
     public void nextTurnShouldNotBeCalledAfterGameWasWon() {
-        when(judge.determineGameWinner()).thenReturn(Optional.of(firstPlayer));
+        when(judge.determineGameWinner(board, 0)).thenReturn(Optional.of(firstPlayer));
 
         game.insertChip(firstPlayer, 0);
 
