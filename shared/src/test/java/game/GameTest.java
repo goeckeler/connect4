@@ -74,4 +74,14 @@ public class GameTest {
         verify(secondPlayer).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
     }
 
+    @Test
+    public void gameShouldTellGameObserverTheOccupiedSlot() {
+        GameObserver gameObserver = mock(GameObserver.class);
+        game.register(gameObserver);
+        int columnNumber = 0;
+        game.insertChip(firstPlayer, columnNumber);
+
+        int rowNumber = Game.NUMBER_OF_ROWS - 1;
+        verify(gameObserver).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
+    }
 }
