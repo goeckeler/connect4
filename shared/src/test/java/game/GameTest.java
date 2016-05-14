@@ -88,6 +88,16 @@ public class GameTest {
         verify(gameObserver).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
     }
 
+
+    @Test
+    public void gameShouldTellJudgeTheOccupiedSlot() {
+        int columnNumber = 0;
+        game.insertChip(firstPlayer, columnNumber);
+
+        int rowNumber = Game.NUMBER_OF_ROWS - 1;
+        verify(judge).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
+    }
+
     @Test
     public void gameShouldTellGameObserversAboutOccupiedSlotsAboveLastRow() {
         game.insertChip(firstPlayer, 0);

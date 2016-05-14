@@ -17,6 +17,7 @@ public class Game {
     public Game(Board board, Judge judge) {
         this.board = board;
         this.judge = judge;
+        register(judge);
     }
 
     public void start() {
