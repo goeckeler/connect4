@@ -38,8 +38,9 @@ public class Game {
         notifyObserversOfSlotOccupied(currentPlayer, columnNumber, board.lastUnoccupiedRowInColumn(columnNumber) + 1);
         if(judge.determineGameWinner().isPresent()) {
             notifyObserversOfWinner(currentPlayer);
+        } else {
+            nextTurn();
         }
-        nextTurn();
     }
 
     private void notifyObserversOfSlotOccupied(Player currentPlayer, int columnNumber, int rowNumber) {

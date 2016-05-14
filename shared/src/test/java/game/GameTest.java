@@ -105,6 +105,15 @@ public class GameTest {
     }
 
     @Test
+    public void nextTurnShouldNotBeCalledAfterGameWasWon() {
+        when(judge.determineGameWinner()).thenReturn(Optional.of(firstPlayer));
+
+        game.insertChip(firstPlayer, 0);
+
+        verify(secondPlayer, never()).yourTurn();
+    }
+
+    @Test
     public void gameShouldNotTellGameObserverWhenGameIsNotWon() {
         game.insertChip(firstPlayer, 0);
 
