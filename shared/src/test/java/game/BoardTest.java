@@ -15,8 +15,9 @@ import static org.mockito.Mockito.mock;
 public class BoardTest {
 
     private static final int NUMBER_OF_ROWS = 6;
+    public static final int NUMBER_OF_COLUMNS = 7;
 
-    private Board board = new Board(NUMBER_OF_ROWS, 7);
+    private Board board = new Board(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
     private final Player player = mock(Player.class);
 
     @Rule
@@ -77,5 +78,26 @@ public class BoardTest {
         thrown.expect(IllegalArgumentException.class);
 
         board.insertChip(0, player);
+    }
+
+    @Test
+    public void boardShouldInitiallyNotReportThatItIsFull() {
+        assertThat(board.isBoardFull()).isFalse();
+    }
+
+    @Test
+    public void boardShouldReportThatItIsFullWhenItIsFull() {
+        Board board = new Board(1, 1);
+        board.insertChip(0, player);
+
+        assertThat(board.isBoardFull()).isTrue();
+    }
+
+    @Test
+    public void boardShouldNotReportThatItIsFullWhenSomeColumsnArent() {
+        Board board = new Board(1, 2);
+        board.insertChip(0, player);
+
+        assertThat(board.isBoardFull()).isFalse();
     }
 }

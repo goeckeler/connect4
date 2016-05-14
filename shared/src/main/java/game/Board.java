@@ -54,6 +54,11 @@ public class Board
     }
 
     public boolean isBoardFull() {
-        return false;
+        for (int i = 0; i < numberOfColumns; ++i) {
+            if (lastUnoccupiedRowInColumn(i) >= 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
