@@ -64,4 +64,8 @@ class VoidPlayer
   @Override
   public void yourTurn() {
   }
+
+  @Override
+  public void onSlotOccupied(final Player player, final int rowNumber, final int columnNumber) {
+  }
 }
