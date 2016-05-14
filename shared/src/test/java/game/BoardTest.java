@@ -78,9 +78,4 @@ public class BoardTest {
 
         board.insertChip(0, player);
     }
-
-    @Test
-    public void isColumnFullShouldBeFalseInitially() {
-        assertThat(board.isColumnFull(0)).isFalse();
-    }
 }

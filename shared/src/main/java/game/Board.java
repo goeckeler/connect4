@@ -44,8 +44,4 @@ public class Board {
     public int getNumberOfColumns() {
         return numberOfColumns;
     }
-
-    public boolean isColumnFull(int columnNumber) {
-        return false;
-    }
 }
