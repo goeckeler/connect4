@@ -2,9 +2,7 @@ package game;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +18,7 @@ public class GameTest {
     private final Player firstPlayer = mock(Player.class);
     private final Player secondPlayer = mock(Player.class);
     private final GameObserver gameObserver = mock(GameObserver.class);
+    private final Judge judge = mock(Judge.class);
 
     @Before
     public void setupGameWithTwoPlayers() {
@@ -91,7 +90,4 @@ public class GameTest {
 
         verify(gameObserver).onSlotOccupied(secondPlayer, Game.NUMBER_OF_ROWS - 2, 0);
     }
-
-    @Test
-    public void
 }
