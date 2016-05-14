@@ -16,6 +16,9 @@ public class Game {
         this.players.add(player);
     }
 
+    public void register(GameObserver observer) {
+    }
+
     public void insertChip(Player currentPlayer, int columnNumber) {
         if(currentPlayer != currentPlayer())
             throw new IllegalArgumentException();
