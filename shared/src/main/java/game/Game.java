@@ -4,29 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    public enum Status {
-        NOT_STARTED, PLAYING
-    }
-
-    private Status status = Status.NOT_STARTED;
+    public static final int NUMBER_OF_ROWS = 6;
     private List<Player> players = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
-    public Status getStatus() {
-        return status;
-    }
-
     public void start() {
-        this.status = Status.PLAYING;
-        this.players.get(currentPlayerIndex).yourTurn();
+        currentPlayer().yourTurn();
     }
 
     public void register(Player player) {
         this.players.add(player);
     }
 
-    public void move() {
+    public void insertChip(Player currentPlayer, int columnNumber) {
+        if(currentPlayer != currentPlayer())
+            throw new IllegalArgumentException();
+        notifyPlayers(currentPlayer, columnNumber, NUMBER_OF_ROWS - 1);
+        nextTurn();
+    }
+
+    private void notifyPlayers(Player currentPlayer, int columnNumber, int rowNumber) {
+        for(Player player : players) {
+            player.onSlotOccupied(currentPlayer, rowNumber, columnNumber);
+        }
+    }
+
+    private void nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        this.players.get(currentPlayerIndex).yourTurn();
+        currentPlayer().yourTurn();
+    }
+
+    private Player currentPlayer() {
+        return this.players.get(currentPlayerIndex);
     }
 }

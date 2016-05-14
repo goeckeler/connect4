@@ -1,6 +1,6 @@
 package game;
 
-public interface Player {
+public interface Player extends GameObserver{
 
     void yourTurn();
 

@@ -2,3 +2,10 @@ Board
  - isColumnFull(int columnNumber)
  - insertChip(int columnNumber, Player player) (throws IllegalArgumentException)
  - slotOwner(int columnNumber, int rowNumber) -> Optional<Player>
+
+Game
+ - insertChip(player, columnNumber) throws Exception
+
+GameObserver
+ - onSlotOcupied(player, columnNumber, rowNumber)
+ - onGameFinished(Optional<Player> winner)

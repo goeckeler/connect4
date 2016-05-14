@@ -1,61 +1,77 @@
 package game;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class GameTest {
+
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
+
     private final Game game = new Game();
     private final Player firstPlayer = mock(Player.class);
     private final Player secondPlayer = mock(Player.class);
 
-    @Test
-    public void gameShouldInitiallyBeInStateNotStarted() {
-        assertThat(game.getStatus(), is(equalTo(Game.Status.NOT_STARTED)));
-    }
-
-    @Test
-    public void gameShouldBeInStatePlayingAfterStarting() {
-        setupGameWithTwoPlayers();
-
-        assertThat(game.getStatus(), is(equalTo(Game.Status.PLAYING)));
+    @Before
+    public void setupGameWithTwoPlayers() {
+        game.register(firstPlayer);
+        game.register(secondPlayer);
+        game.start();
     }
 
     @Test
     public void gameShouldTellFirstPlayerToMoveAfterStarting() {
-        setupGameWithTwoPlayers();
-
         verify(firstPlayer).yourTurn();
     }
 
     @Test
-    public void gameShouldTellNextPlayerToMoveAfterPlayerMoves() {
-        setupGameWithTwoPlayers();
+    public void gameShouldRejectSecondPlayerMoveBeforeFirstPlayerMove() {
+        thrown.expect(IllegalArgumentException.class);
+        game.insertChip(secondPlayer, 0);
+    }
 
-        game.move();
+    @Test
+    public void gameShouldTellNextPlayerToMoveAfterPlayerMoves() {
+        int columnNumber = 0;
+        game.insertChip(firstPlayer, columnNumber);
 
         verify(secondPlayer).yourTurn();
     }
 
     @Test
     public void gameShouldTellFirstPlayerToMoveAfterSecondPlayerMoves() {
-        setupGameWithTwoPlayers();
-
-        game.move();
+        game.insertChip(firstPlayer, 0);
         reset(firstPlayer);
-        game.move();
+        game.insertChip(secondPlayer, 0);
 
         verify(firstPlayer).yourTurn();
     }
 
-    private void setupGameWithTwoPlayers() {
-        game.register(firstPlayer);
-        game.register(secondPlayer);
-        game.start();
+    @Test
+    public void gameShouldTellCallingPlayerOccupiedSlot() {
+        int columnNumber = 0;
+        game.insertChip(firstPlayer, columnNumber);
+
+        int rowNumber = Game.NUMBER_OF_ROWS - 1;
+        verify(firstPlayer).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
     }
+
+
+    @Test
+    public void gameShouldTellOtherPlayerTheOccupiedSlot() {
+        int columnNumber = 0;
+        game.insertChip(firstPlayer, columnNumber);
+
+        int rowNumber = Game.NUMBER_OF_ROWS - 1;
+        verify(secondPlayer).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
+    }
+
 }
