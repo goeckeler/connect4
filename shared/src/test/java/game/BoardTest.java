@@ -1,6 +1,8 @@
 package game;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Optional;
 
@@ -12,7 +14,13 @@ import static org.mockito.Mockito.mock;
  */
 public class BoardTest {
 
-    private Board board = new Board(6, 7);
+    private static final int NUMBER_OF_ROWS = 6;
+
+    private Board board = new Board(NUMBER_OF_ROWS, 7);
+    private final Player player = mock(Player.class);
+
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void boardShouldHaveCorrectDimensions() {
@@ -32,10 +40,47 @@ public class BoardTest {
 
     @Test
     public void slotShouldBeOccupiedAfterPlacing() {
-        Player player = mock(Player.class);
-
         board.insertChip(0, player);
 
-        board.slotOwner(5, 0);
+        Optional<Player> occupier = board.slotOwner(5, 0);
+        assertThat(occupier).contains(player);
+    }
+
+    @Test
+    public void slotInTheWrongRowShouldNotBeOccupiedAfterPlacing() {
+        board.insertChip(0, player);
+
+        assertThat(board.slotOwner(4, 0)).isEmpty();
+    }
+
+    @Test
+    public void slotInTheSecondToLastRowShouldBeOccupiedAfterTwoPlacements() {
+        board.insertChip(0, player);
+        board.insertChip(0, player);
+
+        assertThat(board.slotOwner(4, 0)).contains(player);
+    }
+
+    @Test
+    public void slotInTheWrongColumnShouldNotBeOccupiedAfterPlacing() {
+        board.insertChip(0, player);
+
+        assertThat(board.slotOwner(5, 1)).isEmpty();
+    }
+
+    @Test
+    public void insertChipShouldThrowExceptionIfColumnIsFull() {
+        for (int i = 0; i < NUMBER_OF_ROWS; ++i) {
+            board.insertChip(0, player);
+        }
+
+        thrown.expect(IllegalArgumentException.class);
+
+        board.insertChip(0, player);
+    }
+
+    @Test
+    public void isColumnFullShouldBeFalseInitially() {
+        assertThat(board.isColumnFull(0)).isFalse();
     }
 }
