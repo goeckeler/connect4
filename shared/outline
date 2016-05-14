@@ -1,7 +1,4 @@
 Board
  - isColumnFull(int columnNumber)
- - placeChip(int columnNumber, Player player) (throws IllegalArgumentException)
- - stateAt(int columnNumber, int rowNumber) -> SlotState
-
-SlotState
- - occupiedBy() -> Optional<Player>
+ - insertChip(int columnNumber, Player player) (throws IllegalArgumentException)
+ - slotOwner(int columnNumber, int rowNumber) -> Optional<Player>
