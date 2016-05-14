@@ -29,12 +29,17 @@ public class Board {
     }
 
     public void insertChip(int columnNumber, Player player) {
+        int index = lastUnoccupiedRowInColumn(columnNumber);
+        checkArgument(index >= 0);
+        occupiers[index][columnNumber] = player;
+    }
+
+    public int lastUnoccupiedRowInColumn(int columnNumber) {
         int index = numberOfRows - 1;
         while(index >= 0 && occupiers[index][columnNumber] != null) {
             index--;
         }
-        checkArgument(index >= 0);
-        occupiers[index][columnNumber] = player;
+        return index;
     }
 
     public int getNumberOfRows() {
