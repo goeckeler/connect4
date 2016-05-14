@@ -10,52 +10,52 @@ import static org.mockito.Mockito.verify;
 import org.junit.Test;
 
 public class GameTest {
-	private final Game game = new Game();
-	private final Player firstPlayer = mock(Player.class);
-	private final Player secondPlayer = mock(Player.class);
+    private final Game game = new Game();
+    private final Player firstPlayer = mock(Player.class);
+    private final Player secondPlayer = mock(Player.class);
 
-	@Test
-	public void gameShouldInitiallyBeInStateNotStarted() {
-		assertThat(game.getStatus(), is(equalTo(Game.Status.NOT_STARTED)));
-	}
-	
-	@Test
-	public void gameShouldBeInStatePlayingAfterStarting() {
-		setupGameWithTwoPlayers();
+    @Test
+    public void gameShouldInitiallyBeInStateNotStarted() {
+        assertThat(game.getStatus(), is(equalTo(Game.Status.NOT_STARTED)));
+    }
 
-		assertThat(game.getStatus(), is(equalTo(Game.Status.PLAYING)));
-	}
-	
-	@Test
-	public void gameShouldTellFirstPlayerToMoveAfterStarting() {
-		setupGameWithTwoPlayers();
-		
-		verify(firstPlayer).yourTurn();
-	}
-	
-	@Test
-	public void gameShouldTellNextPlayerToMoveAfterPlayerMoves() {
-		setupGameWithTwoPlayers();
+    @Test
+    public void gameShouldBeInStatePlayingAfterStarting() {
+        setupGameWithTwoPlayers();
 
-		game.move();
-		
-		verify(secondPlayer).yourTurn();
-	}
-	
-	@Test
-	public void gameShouldTellFirstPlayerToMoveAfterSecondPlayerMoves() {
-		setupGameWithTwoPlayers();
-		
-		game.move();
-		reset(firstPlayer);
-		game.move();
-		
-		verify(firstPlayer).yourTurn();
-	}
+        assertThat(game.getStatus(), is(equalTo(Game.Status.PLAYING)));
+    }
 
-	private void setupGameWithTwoPlayers() {
-		game.register(firstPlayer);
-		game.register(secondPlayer);
-		game.start();
-	}
+    @Test
+    public void gameShouldTellFirstPlayerToMoveAfterStarting() {
+        setupGameWithTwoPlayers();
+
+        verify(firstPlayer).yourTurn();
+    }
+
+    @Test
+    public void gameShouldTellNextPlayerToMoveAfterPlayerMoves() {
+        setupGameWithTwoPlayers();
+
+        game.move();
+
+        verify(secondPlayer).yourTurn();
+    }
+
+    @Test
+    public void gameShouldTellFirstPlayerToMoveAfterSecondPlayerMoves() {
+        setupGameWithTwoPlayers();
+
+        game.move();
+        reset(firstPlayer);
+        game.move();
+
+        verify(firstPlayer).yourTurn();
+    }
+
+    private void setupGameWithTwoPlayers() {
+        game.register(firstPlayer);
+        game.register(secondPlayer);
+        game.start();
+    }
 }
