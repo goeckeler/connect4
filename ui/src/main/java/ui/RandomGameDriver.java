@@ -34,7 +34,7 @@ public class RandomGameDriver
 
   @Override
   public void onSlotOccupied(final Player player, final int rowNumber, final int columnNumber) {
-    board.insertChip(columnNumber, player);
+    System.err.println(String.format("%s drops in #%d\n", player.getName(), columnNumber));
     ui.draw(board);
   }
 
