@@ -9,7 +9,6 @@ import java.util.Optional;
  */
 public class Board
 {
-  private Player startingPlayer;
   private final int numberOfRows;
   private final int numberOfColumns;
   private Player[][] occupiers;
@@ -43,13 +42,5 @@ public class Board
 
   public int getNumberOfColumns() {
     return numberOfColumns;
-  }
-
-  public void setStartingPlayer(final Player player) {
-    this.startingPlayer = player;
-  }
-
-  public Player getStartingPlayer() {
-    return startingPlayer;
   }
 }
