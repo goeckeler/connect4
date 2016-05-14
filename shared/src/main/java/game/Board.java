@@ -45,6 +45,10 @@ public class Board
         return index;
     }
 
+    public boolean canInsert(int columnNumber) {
+      return lastUnoccupiedRowInColumn(columnNumber) >= 0;
+    }
+    
     public int getNumberOfRows() {
         return numberOfRows;
     }
