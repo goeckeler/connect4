@@ -1,8 +1,11 @@
 package ui;
 
-import game.Board;
+import java.util.Optional;
 
-public class ConsoleUI
+import game.Board;
+import game.Player;
+
+public class ConsoleBoardUI
 {
   private static final char EMPTY_SLOT = '.';
 
@@ -16,7 +19,13 @@ public class ConsoleUI
     final int numberOfRows = board.getNumberOfRows();
     for (int row = 0; row < numberOfRows; row++) {
       for (int column = 0; column < numberOfColumns; column++) {
-        string.append(EMPTY_SLOT);
+        final Optional<Player> owner = board.slotOwner(row, column);
+        if (!owner.isPresent()) {
+          string.append(EMPTY_SLOT);
+        } else {
+          string.append(ChipColor.colorFor(owner.get()));
+        }
+
       }
       string.append('\n');
     }
