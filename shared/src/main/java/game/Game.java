@@ -2,14 +2,21 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Game {
     public static final int NUMBER_OF_ROWS = 6;
     public static final int NUMBER_OF_COLUMNS = 7;
+
+    private final Judge judge;
     private final Board board = new Board(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
     private final List<Player> players = new ArrayList<>();
     private final List<GameObserver> observers = new ArrayList<>();
     private int currentPlayerIndex = 0;
+
+    public Game(Judge judge) {
+        this.judge = judge;
+    }
 
     public void start() {
         currentPlayer().yourTurn();
@@ -29,7 +36,17 @@ public class Game {
             throw new IllegalArgumentException();
         board.insertChip(columnNumber, currentPlayer);
         notifyObservers(currentPlayer, columnNumber, board.lastUnoccupiedRowInColumn(columnNumber) + 1);
+        Optional<Player> winner = judge.determineGameWinner();
+        if(winner.isPresent()) {
+            notifyObserversOfWinner(winner.get());
+        }
         nextTurn();
+    }
+
+    private void notifyObserversOfWinner(Player winner) {
+        for(GameObserver observer : observers) {
+            observer.onGameFinished(Optional.of(winner));
+        }
     }
 
     private void notifyObservers(Player currentPlayer, int columnNumber, int rowNumber) {

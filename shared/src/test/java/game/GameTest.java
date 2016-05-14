@@ -9,19 +9,23 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Optional;
+
 public class GameTest {
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
 
-    private final Game game = new Game();
+    private final Judge judge = mock(Judge.class);
+
+    private final Game game = new Game(judge);
     private final Player firstPlayer = mock(Player.class);
     private final Player secondPlayer = mock(Player.class);
     private final GameObserver gameObserver = mock(GameObserver.class);
-    private final Judge judge = mock(Judge.class);
 
     @Before
     public void setupGameWithTwoPlayers() {
+        when(judge.determineGameWinner()).thenReturn(Optional.empty());
         game.register(firstPlayer);
         game.register(secondPlayer);
         game.register(gameObserver);
@@ -89,5 +93,14 @@ public class GameTest {
         game.insertChip(secondPlayer, 0);
 
         verify(gameObserver).onSlotOccupied(secondPlayer, Game.NUMBER_OF_ROWS - 2, 0);
+    }
+
+    @Test
+    public void gameShouldTellGameObserversWhenGameIsWon() {
+        when(judge.determineGameWinner()).thenReturn(Optional.of(firstPlayer));
+
+        game.insertChip(firstPlayer, 0);
+
+        verify(gameObserver).onGameFinished(Optional.of(firstPlayer));
     }
 }
