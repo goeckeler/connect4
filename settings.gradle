@@ -2,4 +2,4 @@
 
 // if you have modules of modules use ":" instead of the folder separator
 // simply list all modules enclosed in "", comma separated
-include "shared"
+include "shared", "ui"
