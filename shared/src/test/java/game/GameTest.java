@@ -16,9 +16,10 @@ public class GameTest {
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
 
+    private final Board board = new Board(Game.NUMBER_OF_ROWS, Game.NUMBER_OF_COLUMNS);
     private final Judge judge = mock(Judge.class);
 
-    private final Game game = new Game(judge);
+    private final Game game = new Game(board, judge);
     private final Player firstPlayer = mock(Player.class);
     private final Player secondPlayer = mock(Player.class);
     private final GameObserver gameObserver = mock(GameObserver.class);

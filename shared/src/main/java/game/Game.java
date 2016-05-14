@@ -9,12 +9,13 @@ public class Game {
     public static final int NUMBER_OF_COLUMNS = 7;
 
     private final Judge judge;
-    private final Board board = new Board(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
+    private final Board board;
     private final List<Player> players = new ArrayList<>();
     private final List<GameObserver> observers = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
-    public Game(Judge judge) {
+    public Game(Board board, Judge judge) {
+        this.board = board;
         this.judge = judge;
     }
 
