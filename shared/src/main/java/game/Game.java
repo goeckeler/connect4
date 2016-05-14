@@ -35,23 +35,22 @@ public class Game {
         if(currentPlayer != currentPlayer())
             throw new IllegalArgumentException();
         board.insertChip(columnNumber, currentPlayer);
-        notifyObservers(currentPlayer, columnNumber, board.lastUnoccupiedRowInColumn(columnNumber) + 1);
-        Optional<Player> winner = judge.determineGameWinner();
-        if(winner.isPresent()) {
-            notifyObserversOfWinner(winner.get());
+        notifyObserversOfSlotOccupied(currentPlayer, columnNumber, board.lastUnoccupiedRowInColumn(columnNumber) + 1);
+        if(judge.determineGameWinner().isPresent()) {
+            notifyObserversOfWinner(currentPlayer);
         }
         nextTurn();
+    }
+
+    private void notifyObserversOfSlotOccupied(Player currentPlayer, int columnNumber, int rowNumber) {
+        for(GameObserver observer : observers) {
+            observer.onSlotOccupied(currentPlayer, rowNumber, columnNumber);
+        }
     }
 
     private void notifyObserversOfWinner(Player winner) {
         for(GameObserver observer : observers) {
             observer.onGameFinished(Optional.of(winner));
-        }
-    }
-
-    private void notifyObservers(Player currentPlayer, int columnNumber, int rowNumber) {
-        for(GameObserver observer : observers) {
-            observer.onSlotOccupied(currentPlayer, rowNumber, columnNumber);
         }
     }
 

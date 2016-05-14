@@ -103,4 +103,11 @@ public class GameTest {
 
         verify(gameObserver).onGameFinished(Optional.of(firstPlayer));
     }
+
+    @Test
+    public void gameShouldNotTellGameObserverWhenGameIsNotWon() {
+        game.insertChip(firstPlayer, 0);
+
+        verify(gameObserver, never()).onGameFinished(Optional.of(firstPlayer));
+    }
 }
