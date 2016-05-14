@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Game {
     public static final int NUMBER_OF_ROWS = 6;
+    public static final int NUMBER_OF_COLUMNS = 7;
+    private final Board board = new Board(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
     private final List<Player> players = new ArrayList<>();
     private final List<GameObserver> observers = new ArrayList<>();
     private int currentPlayerIndex = 0;
@@ -25,7 +27,8 @@ public class Game {
     public void insertChip(Player currentPlayer, int columnNumber) {
         if(currentPlayer != currentPlayer())
             throw new IllegalArgumentException();
-        notifyObservers(currentPlayer, columnNumber, NUMBER_OF_ROWS - 1);
+        board.insertChip(columnNumber, currentPlayer);
+        notifyObservers(currentPlayer, columnNumber, board.lastUnoccupiedRowInColumn(columnNumber) + 1);
         nextTurn();
     }
 

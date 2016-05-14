@@ -19,11 +19,13 @@ public class GameTest {
     private final Game game = new Game();
     private final Player firstPlayer = mock(Player.class);
     private final Player secondPlayer = mock(Player.class);
+    private final GameObserver gameObserver = mock(GameObserver.class);
 
     @Before
     public void setupGameWithTwoPlayers() {
         game.register(firstPlayer);
         game.register(secondPlayer);
+        game.register(gameObserver);
         game.start();
     }
 
@@ -64,7 +66,6 @@ public class GameTest {
         verify(firstPlayer).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
     }
 
-
     @Test
     public void gameShouldTellOtherPlayerTheOccupiedSlot() {
         int columnNumber = 0;
@@ -76,12 +77,21 @@ public class GameTest {
 
     @Test
     public void gameShouldTellGameObserverTheOccupiedSlot() {
-        GameObserver gameObserver = mock(GameObserver.class);
-        game.register(gameObserver);
         int columnNumber = 0;
         game.insertChip(firstPlayer, columnNumber);
 
         int rowNumber = Game.NUMBER_OF_ROWS - 1;
         verify(gameObserver).onSlotOccupied(firstPlayer, rowNumber, columnNumber);
     }
+
+    @Test
+    public void gameShouldTellGameObserversAboutOccupiedSlotsAboveLastRow() {
+        game.insertChip(firstPlayer, 0);
+        game.insertChip(secondPlayer, 0);
+
+        verify(gameObserver).onSlotOccupied(secondPlayer, Game.NUMBER_OF_ROWS - 2, 0);
+    }
+
+    @Test
+    public void
 }
